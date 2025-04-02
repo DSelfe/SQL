@@ -1,0 +1,63 @@
+--#In this SQL, I'm querying a database with multiple tables in it to quantify statistics about customer and order data using the RDMS SQLiteStudio. 
+
+-- Query One: How many many unique orders were placed in January? In other words, how many distinct order ids do we have?
+
+SELECT COUNT(distinct orderid)
+FROM BIT_DB.JanSales
+WHERE length(orderid) = 6
+AND orderid <> 'Order ID';
+
+--Query Two: How many of those orders were for an iPhone? 
+
+SELECT COUNT(distinct orderid)
+FROM BIT_DB.JanSales
+WHERE product = 'iPhone' 
+AND length(orderid) = 6
+AND orderid <> 'Order ID'; 
+
+--Query Three: Select the customer account numbers for all the orders that were placed in February. 
+
+SELECT DISTINCT acctnum
+FROM BIT_DB.customers AS cust
+INNER JOIN BIT_DB.FebSales AS Feb
+ON cust.order_id = Feb.orderID
+WHERE length(orderid) = 6
+AND orderid <> 'Order ID'; 
+
+--Query Four: Which product was the cheapest one sold in January, and what was the price? 
+
+SELECT DISTINCT Product, price 
+FROM Bit_DB.JanSales 
+WHERE price in (SELECT min(price) FROM Bit_DB.JanSales); 
+
+--ALTERNATIVELY 
+
+SELECT distinct product, price
+FROM BIT_DB.JanSales
+ORDER BY price ASC LIMIT 1;
+
+--Query Five: What is the total revenue for each product sold in January? 
+
+SELECT DISTINCT Product, ROUND(SUM(Quantity)*price,2) AS Total_Revenue 
+FROM Bit_DB.JanSales 
+GROUP BY Product
+ORDER BY Total_Revenue DESC;
+
+--Query Six: Which products were sold in February at 548 Lincoln St, Seattle, WA 98101, how many of each were sold, and what was the total revenue? 
+
+SELECT Product, SUM(Quantity) AS Amount_Sold, ROUND(SUM(Quantity)*price,2) AS Total_Revenue, location 
+FROM BIT_DB.FebSales 
+WHERE location LIKE '548 Lincoln St, Seattle, WA 98101' 
+GROUP BY Product 
+ORDER BY Total_Revenue DESC; 
+
+--Query Seven: How many customers ordered more than 2 products at a time in February, and what was the average amount spent for those customers? 
+
+SELECT count(distinct cust.acctnum) AS Customer_Count,
+ROUND(avg(quantity*price),2) AS Avg_Amount_Spent 
+FROM BIT_DB.FebSales AS Feb
+LEFT JOIN BIT_DB.customers AS cust
+ON FEB.orderid = cust.order_id
+WHERE Feb.Quantity > 2
+AND length(orderid) = 6
+AND orderid <> 'Order ID';
