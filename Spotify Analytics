@@ -68,12 +68,12 @@ WHERE track_name IN
 --I'm epxloring the use of CTE's here. 
 
 WITH tempTable AS (
-    SELECT artist_name, AVG(popularity) AS Average_Popularity
+    SELECT artist_name, AVG(popularity) AS average_popularity
     FROM Spotifydata
     GROUP BY artist_name
     )
     
-SELECT artist_name AS Top_Star, Average_Popularity, 'Top Star' AS Tag 
+SELECT artist_name, average_popularity, 'Top Star' AS Tag 
 FROM tempTable 
-WHERE Average_Popularity >= 90
-ORDER BY Average_Popularity DESC; 
+WHERE average_popularity >= 90
+ORDER BY average_popularity DESC; 
