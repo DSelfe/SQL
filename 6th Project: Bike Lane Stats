@@ -1,0 +1,31 @@
+--Using a dataset on safety ratings of city bikelanes, this is an ongoing project to improve my familiarity with CTEs and window functions. 
+
+--Query: Show a list of all the bike lanes, both safety ratings for each lane, the average safety rating for each lane, and a label with the recommendation as "Remove", "Leave As-Is", or "Improvements Needed".
+
+SELECT street, safetyrating,
+AVG(safetyrating) OVER (PARTITION BY street) as "Average_safety_rating",
+CASE
+    WHEN AVG(safetyrating) OVER (PARTITION BY street) >= 4 THEN 'Leave As-Is'
+    WHEN AVG(safetyrating) OVER (PARTITION BY street) < 2.5 THEN 'Remove'
+    ELSE 'Improvements Needed'
+END AS Recommendations
+FROM CityBikeLanes
+ORDER BY Average_safety_rating DESC; 
+
+--Alternatively: 
+
+WITH BikeStats AS (
+    SELECT street, safetyrating,
+    AVG(safetyrating) OVER (PARTITION BY street) as "Average_safety_rating"
+    FROM CityBikeLanes 
+    )
+    
+SELECT street, safetyrating, "Average_safety_rating",
+CASE
+    WHEN "Average_safety_rating" >= 4 THEN 'Leave As-Is'
+    WHEN "Average_safety_rating" < 2.5 THEN 'Remove'
+    ELSE 'Improvements Needed'
+    
+END AS Recommendations
+FROM BikeStats
+ORDER BY Average_safety_rating DESC;
