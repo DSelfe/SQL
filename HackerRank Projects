@@ -43,7 +43,8 @@ UNION ALL
 (SELECT CITY, LENGTH(CITY) AS len
 FROM STATION
 ORDER BY len DESC, CITY ASC
-LIMIT 1); 
+LIMIT 1)
+;
 
 --Query the list of CITY names starting with vowels (i.e., a, e, i, o, or u) from STATION. Your result cannot contain duplicates. 
 
