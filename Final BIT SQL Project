@@ -173,3 +173,21 @@ JOIN tracks ON albums.AlbumId = tracks.AlbumId, average_milliseconds_track
 
 WHERE tracks.Milliseconds > average_milliseconds_track.Avg_Milliseconds
 ; 
+
+--Query Seventeen: Find all artists who have released albums where every track is longer than the average duration of all tracks in the database. Display the artist name and the count of such albums they have. 
+
+SELECT artists.Name AS Artists, COUNT(albums.AlbumId) AS Qualifying_Albums 
+FROM artists 
+
+JOIN albums 
+ON artists.ArtistId = albums.AlbumId
+
+WHERE albums.AlbumId NOT IN 
+    (SELECT tracks.AlbumId 
+    FROM tracks
+    WHERE tracks.Milliseconds <= (SELECT AVG(Milliseconds) FROM tracks)
+    ) 
+GROUP BY artists.ArtistId 
+HAVING COUNT (albums.AlbumId) > 0
+ORDER BY Qualifying_Albums DESC
+; 
