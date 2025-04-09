@@ -158,7 +158,7 @@ JOIN employees Manager
 ON Employee.ReportsTo = Manager.EmployeeId
 ;
 
---Query Sixteen: Calculate the avergae milliseconds per track. Then, the tracks with a duration grater than the avergae, show the name of the artist. Include use of a CTE in your query.  
+--Query Sixteen: Calculate the avergae milliseconds per track. Then, for tracks with a duration greater than the avergae, show the name of the artist and track. Include use of a CTE in your query.  
  
 WITH average_milliseconds_track AS (
     SELECT AVG(Milliseconds) AS Avg_Milliseconds
