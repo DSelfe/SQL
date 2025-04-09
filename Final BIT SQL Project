@@ -150,7 +150,7 @@ ORDER BY Total_Sales DESC
 LIMIT 1
 ; 
 
---Query Fifteen: listing their first names names accordingly, who reports to whom? 
+--Query Fifteen: Listing their first names names accordingly, who reports to whom? 
 
 SELECT Employee.EmployeeId, Employee.FirstName Junior, Manager.FirstName Managed_By
 FROM employees Employee 
