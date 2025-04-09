@@ -155,4 +155,21 @@ LIMIT 1
 SELECT Employee.EmployeeId, Employee.FirstName Junior, Manager.FirstName Managed_By
 FROM employees Employee 
 JOIN employees Manager 
-ON Employee.ReportsTo = Manager.EmployeeId;  
+ON Employee.ReportsTo = Manager.EmployeeId
+;
+
+--Query Sixteen: Calculate the avergae milliseconds per track. Then, the tracks with a duration grater than the avergae, show the name of the artist. Include use of a CTE in your query.  
+ 
+WITH average_milliseconds_track AS (
+    SELECT AVG(Milliseconds) AS Avg_Milliseconds
+    FROM tracks
+) 
+
+SELECT artists.Name AS Artists, ROUND(Milliseconds,2) AS Duration 
+FROM artists 
+
+JOIN albums ON artists.ArtistId = albums.ArtistId
+JOIN tracks ON albums.AlbumId = tracks.AlbumId, average_milliseconds_track
+
+WHERE tracks.Milliseconds > average_milliseconds_track.Avg_Milliseconds
+; 
