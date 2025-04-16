@@ -47,10 +47,13 @@ ORDER BY Task_Duration DESC
 
 --Return the result table sorted by id in ascending order. 
 
-SELECT DISTINCT authors.author_id AS id 
-FROM Views authors 
-JOIN Views viewers 
-ON authors.author_id = viewers.viewer_id
+SELECT DISTINCT author_id AS id
+FROM Views
+WHERE author_id IN (
+    SELECT viewer_id
+    FROM Views
+    WHERE author_id = viewer_id
+)
 ORDER BY id ASC
 ; 
 
