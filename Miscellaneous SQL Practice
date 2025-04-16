@@ -17,3 +17,15 @@ GROUP BY MONTH(Start_Date), MONTHNAME(Start_Date)
 ORDER BY MONTH(Start_Date)
 ; 
 
+----Write a MySQL query to identify tasks with unusually long durations, specifically those that took more than twice the average duration of all tasks. 
+
+WITH AvgDuration AS (
+  SELECT AVG(DATEDIFF(End_Date, Start_Date)) AS Avg_Task_Len 
+  FROM Projects
+)
+
+SELECT Task_ID, DATEDIFF(End_Date, Start_Date) AS Task_Duration
+FROM Projects, AvgDuration
+WHERE DATEDIFF(End_Date, Start_Date) > AvgDuration.Avg_Task_Len * 2
+ORDER BY Task_Duration DESC
+; 
