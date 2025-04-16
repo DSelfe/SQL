@@ -1,0 +1,19 @@
+--Write a MySQL query to find all overlapping tasks, where one task starts before another ends but finishes after the second task has started. 
+
+SELECT p1.Task_ID AS Task1, p2.Task_ID AS Task2
+FROM Projects p1 
+JOIN Projects p2 
+ON p1.Task_ID < p2.Task_ID 
+WHERE p1.Start_Date <= p2.End_Date 
+AND p1.End_Date >= p2.Start_Date 
+; 
+
+--Write a MySQL query to create a summary showing the count of tasks that started in each month of 2024, displaying the month name and the corresponding count.
+
+SELECT MONTHNAME(Start_Date) AS Month_Name, COUNT(Task_ID) AS Task_Count 
+FROM Projects 
+WHERE YEAR(Start_Date) = 2024 
+GROUP BY MONTH(Start_Date), MONTHNAME(Start_Date)
+ORDER BY MONTH(Start_Date)
+; 
+
